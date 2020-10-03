@@ -2,6 +2,8 @@
 node_modules
 /dist
 
+dbcli_2/node_modules
+
 
 # local env files
 .env.local
