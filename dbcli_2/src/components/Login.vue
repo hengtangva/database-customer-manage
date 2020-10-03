@@ -46,29 +46,28 @@
   export default {
     methods: {
       login() {
-        this.$refs.loginForm.validate((valid) => {//表单的验证,,,async(valid),异步
+        this.$refs.loginForm.validate(async (valid) => {//表单的验证,,,async(valid),异步
           if (valid) {
 
             //发送网络请求，
-            //const {data: res} = await this.$http.post('url',this.user);，
-            //if(res.meta.status !== 200) return console.log('登陆失败')
-            //console.log('登陆成功');
-           // window.sessionStorage.setItem('token',res.data.token);//将token保存在sessionStorage中，供访问权限
-
-            if (this.user.name === 'admin' && this.user.pass === '123') {//这里时默认的账号和密码，仅供测试使用
-              this.$notify({
-                type: 'success',
-                message: '欢迎你,' + this.user.name + '!',
-                duration: 3000
-              })
-              this.$router.replace('/main')//跳转到主界面
-            } else {
+            const {data: res} = await this.$http.post('login.do',this.user);
+            if(res.meta.status !== 200){
               this.$message({
                 type: 'error',
                 message: '用户名或密码错误',
                 showClose: true
               })
+              return
             }
+            console.log('登陆成功');
+            window.sessionStorage.setItem('token',res.data.token);//将token保存在sessionStorage中，供访问权限
+
+            this.$notify({
+              type: 'success',
+              message: '欢迎你,' + this.user.name + '!',
+              duration: 3000
+            })
+            this.$router.replace('/main')//跳转到主界面
           } else {
             return false
           }
