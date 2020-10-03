@@ -49,8 +49,8 @@
   export default {
     name: 'Main',
     methods: {
-      logout(){//退出登录
-        this.$router.push('./login');
+      logout(){//退出登录,返回登陆页
+        this.$router.push('/');
       },
     }
   }

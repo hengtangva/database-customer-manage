@@ -19,7 +19,7 @@
 
     <el-form-item>
       <el-button type="primary" @click="onSubmit">注册</el-button>
-      <el-button @clikc="reset">重置</el-button>
+      <el-button @click="reset">重置</el-button>
     </el-form-item>
 
   </el-form>

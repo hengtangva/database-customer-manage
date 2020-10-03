@@ -22,8 +22,8 @@
               class="atom"
       >
       </vue-particles>
+      <h4>客户关系管理系统</h4>
     <el-row type="flex" justify="center" >
-
       <!--//这里的:model绑定的user 为表单对象，发送网络请求时，请把它做为参数-->
       <el-form ref="loginForm" :model="user"  status-icon label-width="80px">
         <el-form-item label="用户名" prop="name">
@@ -102,7 +102,7 @@
     transform: translate(-50%,-50%);
   }
   .login_container {
-    background-image: url("../assets/background/background.jpg");
+    background-image: url("../assets/background/bac3.jpg");
     height: 100%;
     background-size: 100% 100%;
     position: fixed;
@@ -113,5 +113,10 @@
     left: 40%;
     top: 60%;
     transform: translate(-50%,-50%);
+  }
+  h4{
+    position: absolute;
+    top: 5%;
+    left: 35%;
   }
 </style>
