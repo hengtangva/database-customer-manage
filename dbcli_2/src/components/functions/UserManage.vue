@@ -281,16 +281,13 @@
 
       //从数据库获取记录result，并更新到userList，返回来的result是一个对象数组
       async getUserList() {
-        console.log('get')
-        /*  下面是我写的一些伪代码
-        result = get('url')
-        if(failed) {//请求失败，
-          return this.$message.error('获取用户列表失败')
-        }
-        //获取成功
-        this.userList = result
-      }
-    }*/
+        console.log('正在获取用户信息')
+
+        const {data: respondInfo} = await this.$http.post('getuserinfo',null);
+
+        this.userList = respondInfo.userList;
+
+        console.log('成功' + this.userList.length);
       },
 
     }
