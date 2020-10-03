@@ -22,18 +22,27 @@
               <i class="el-icon-user"></i>
               <span slot="title">客户资料管理</span>
           </el-menu-item>
+
           <el-menu-item index = '/main/exercise'>
             <i class="el-icon-menu"></i>
             <span slot="title">培训管理</span>
           </el-menu-item>
+
           <el-menu-item index = '/main/sold' >
             <i class="el-icon-s-cooperation"></i>
             <span slot="title">售后服务管理</span>
           </el-menu-item>
+
           <el-menu-item index = '/main/complain'>
             <i class="el-icon-edit-outline"></i>
-            <span slot="title">投诉与反馈管理</span>
+            <span slot="title">投诉管理</span>
           </el-menu-item>
+
+          <el-menu-item index = '/main/feedback'>
+            <i class="el-icon-s-data"></i>
+            <span slot="title">新品市场反馈</span>
+          </el-menu-item>
+
         </el-menu>
       </el-aside>
 

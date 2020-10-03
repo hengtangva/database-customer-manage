@@ -9,8 +9,8 @@
     <el-card>
       <el-row :gutter = '20'>
         <el-col :span = '7'>
-          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @click="getComplainList">
-            <el-button slot="append" icon="el-icon-search" @click="getComplainList"></el-button>
+          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @click="getsoldList">
+            <el-button slot="append" icon="el-icon-search" @click="getsoldList"></el-button>
           </el-input>
         </el-col>
         <el-col :span = '4'>
@@ -18,11 +18,11 @@
         </el-col>
       </el-row>
       <!--这里时显示用户信息的部分-->
-      <el-table :data = 'complainList' stripe> <!--绑定数据为，complainList-->
+      <el-table :data = 'soldList' stripe> <!--绑定数据为，soldList-->
 
         <!--索引列-->
         <el-table-column  type="index"></el-table-column>
-        <!--这里我就写两个作为样例了，具体展示多少信息，可以自己设置，或者再一起讨论-->
+
         <el-table-column label = '用户编码' >
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.userId }}</span>
@@ -32,6 +32,12 @@
         <el-table-column label = '交易单号'>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.dealId }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label = '商品编号'>
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.goodsId }}</span>
           </template>
         </el-table-column>
 
@@ -68,7 +74,7 @@
 
     <!--添加用户对话框-->
     <el-dialog
-            title = "添加用户"
+            title = "添加交易记录"
             @close="addDialogClosed"
             :visible.sync = "addDialogVisible"
             width = "30%">
@@ -82,9 +88,14 @@
           <el-input v-model="form.dealId"></el-input>
         </el-form-item>
 
+        <el-form-item label="商品编号">
+          <el-input v-model="form.goodsId"></el-input>
+        </el-form-item>
+
         <el-form-item label="服务质量评分">
           <el-input v-model="form.score"></el-input>
         </el-form-item>
+
 
         <el-form-item>
           <el-button type="primary" @click="onSubmit">添加</el-button>
@@ -117,21 +128,24 @@
         //发送网络请求时，请直接把所有的用户信息都返回给我,
         //在添加用户，和修改用户信息时，我的想法是这样的，发送网络请求把要修改的内容传过去，
         //你那边更新数据库内容，然后动态把新的userList再发给我，以达到客户端这边的动态显示修改内容
-        complainList: [
+        soldList: [
           {
             userId: '001',
             dealId: '122',
-            score: 90
+            score: 90,
+            goodsId: '001'
           },
           {
             userId: '007',
             dealId: '332',
-            score: 80
+            score: 80,
+            goodsId: '002'
           },
           {
             userId: '009',
             dealId: '002',
             score: 50,
+            goodsId: '003'
           }
         ],
         total: 0,
@@ -141,7 +155,8 @@
         form: {
           userId: '',
           dealId: '',
-          score: ''
+          score: '',
+          goodsId: ''
         },   //添加用户所需要填写的表单
 
       }
@@ -167,7 +182,7 @@
       //具体实现，请更新到数据库
       onSubmit() {
         console.log(this.form);
-        this.complainList.push(this.form)
+        this.soldList.push(this.form)
       },
 
       //根据id删除用户
@@ -189,10 +204,10 @@
         //这里是直接操纵userList作为测试
         let n
         console.log(id)
-        for (n in this.complainList) {
-          if (this.complainList[n].dealId === id) {
-            this.complainList.splice(n,1)
-            console.log(this.complainList[n])
+        for (n in this.soldList) {
+          if (this.soldList[n].dealId === id) {
+            this.soldList.splice(n,1)
+            console.log(this.soldList[n])
           }
         }
 
@@ -202,14 +217,14 @@
         }
         //成功
         this.$message.success('删除用户成功')*/
-        this.getComplainList() //更新用户列表
+        this.getsoldList() //更新用户列表
       },
 
 
       //网络请求请获得用户记录在下面函数里实现，具体是实现对用户列表userList和数据库里面的数据进行双向绑定
 
       //从数据库获取记录result，并更新到userList，返回来的result是一个对象数组
-      async getComplainList() {
+      async getsoldList() {
         console.log('get')
         /*  下面是我写的一些伪代码
         result = get('url')
@@ -217,7 +232,7 @@
           return this.$message.error('获取用户列表失败')
         }
         //获取成功
-        this.userList = result
+        this.soldList = result
       }
     }*/
       },

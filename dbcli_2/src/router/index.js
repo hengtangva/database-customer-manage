@@ -8,6 +8,7 @@ import AfterSold from "../components/functions/AfterSold";
 import ExerciseManage from "../components/functions/ExerciseManage";
 import ComplainManage from "../components/functions/ComplainManage";
 import Welcome from "../components/functions/Welcome";
+import NewFeedBack from "../components/functions/NewFeedBack";
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,10 @@ const routes = [
       {
         path: '/main/complain',
         component: ComplainManage,
+      },
+      {
+        path: '/main/feedback',
+        component: NewFeedBack
       }
     ]
   },

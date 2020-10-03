@@ -3,20 +3,11 @@
     <!--导航区域-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: './' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>售后服务管理</el-breadcrumb-item>
+      <el-breadcrumb-item>投诉管理</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-card>
-      <el-row :gutter = '20'>
-        <el-col :span = '7'>
-          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @click="getComplainList">
-            <el-button slot="append" icon="el-icon-search" @click="getComplainList"></el-button>
-          </el-input>
-        </el-col>
-        <el-col :span = '4'>
-          <el-button type = "primary" @click = "addDialogVisible = true">添加考核单</el-button>
-        </el-col>
-      </el-row>
+
       <!--这里时显示用户信息的部分-->
       <el-table :data = 'complainList' stripe> <!--绑定数据为，complainList-->
 
@@ -26,8 +17,8 @@
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
 
-              <el-form-item label="电话号码">
-                <span>{{ props.row.tel }}</span>
+              <el-form-item label="投诉内容">
+                <span>{{ props.row.complain}}</span>
               </el-form-item>
 
             </el-form>
@@ -164,18 +155,13 @@
           {
             userId: '001',
             username: 'th',
-            tel: '110'
+            complain: 'price too high'
           },
           {
             userId: '007',
             username: 'kobe',
-            tel: '119'
+            complain: 'quality bad'
           },
-          {
-            userId: '009',
-            username: 'jordan',
-            tel: '3553',
-          }
         ],
         total: 0,
 
