@@ -67,7 +67,7 @@
               message: '欢迎你,' + this.user.name + '!',
               duration: 3000
             })
-            this.$router.replace('/main')//跳转到主界面
+            await this.$router.replace('/main')//跳转到主界面
           } else {
             return false
           }

@@ -48,6 +48,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column label = '公司单位'>
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.company }}</span>
+          </template>
+        </el-table-column>
+
         <!--这里是对用户信息的修改删除-->
         <el-table-column label = '操作'>
           <template slot-scope="scope">     <!--scope用来接收数据-->
@@ -164,17 +170,20 @@
           {
             userId: '001',
             username: 'th',
-            tel: '110'
+            tel: '110',
+            company: 'microsoft',
           },
           {
             userId: '007',
             username: 'kobe',
-            tel: '119'
+            tel: '119',
+            company: 'facebook'.
           },
           {
             userId: '009',
             username: 'jordan',
             tel: '3553',
+            company: 'ibm'
           }
         ],
         total: 0,
@@ -184,7 +193,8 @@
         form: {
           userId: '',
           username: '',
-          tel: ''
+          tel: '',
+          company:''
         },   //添加用户所需要填写的表单
 
         editDialogVisible: false,//控制修改用户信息对话框的显示和隐藏
