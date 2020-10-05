@@ -211,9 +211,15 @@
       //提交添加内容，
       // 这里我是直接把添加的用户信息直接append到userList中作为测试
       //具体实现，请更新到数据库
-      onSubmit() {
+      async onSubmit() {
         console.log(this.form);
-        this.userList.push(this.form)
+        //this.userList.push(this.form)
+
+        await this.$http.post('a.general', {type: "edit_or_add_user", user: this.form});
+
+        console.log("成功添加")
+
+        this.getUserList()
       },
 
       //展示用户编辑的对话框，来进行修改用户信息，这里请发送请求获取用户id
@@ -232,8 +238,14 @@
       },
 
       //监听修改对话框关闭事件，这里关闭后，提交，更新数据到数据库
-      editUpdate() {
+      async editUpdate() {
+        await this.$http.post('a.general', {type: "edit_or_add_user", user: this.editForm});
+
+        console.log("成功更新")
+
         this.editDialogVisible = false // 关闭对话框
+
+        this.getUserList()
       },
 
       //监听添加用户对话框关闭事件
@@ -258,14 +270,16 @@
           return this.$message('已取消')
         }
         //这里是直接操纵userList作为测试
-        let n
+        //let n
         console.log(id)
-        for (n in this.userList) {
-          if (this.userList[n].userId === id) {
-            this.userList.splice(n,1)
-            console.log(this.userList[n])
-          }
-        }
+        // for (n in this.userList) {
+        //   if (this.userList[n].userId === id) {
+        //     this.userList.splice(n,1)
+        //     console.log(this.userList[n])
+        //   }
+        // }
+
+        await this.$http.post('a.general',{type:"delete_user",userId:id})
 
         //发送网络请求，删除该条记录(参数为id，即userId），下面是伪代码
         /*        if(failed){//失败
@@ -273,6 +287,9 @@
         }
         //成功
         this.$message.success('删除用户成功')*/
+
+        this.$message.success('删除用户成功')
+
         this.getUserList() //更新用户列表
       },
 
@@ -283,7 +300,7 @@
       async getUserList() {
         console.log('正在获取用户信息')
 
-        const {data: respondInfo} = await this.$http.post('getuserinfo',null);
+        const {data: respondInfo} = await this.$http.post('a.general',{type:"get_users"});
 
         this.userList = respondInfo.userList;
 
