@@ -105,6 +105,10 @@
             <el-input v-model="form.tel"></el-input>
           </el-form-item>
 
+          <el-form-item label="用户单位">
+            <el-input v-model="form.company"></el-input>
+          </el-form-item>
+
           <el-form-item>
             <el-button type="primary" @click="onSubmit">添加</el-button>
             <el-button @click="reset">重置</el-button>
@@ -138,6 +142,11 @@
 
         <el-form-item label="用户电话">
           <el-input v-model="editForm.tel" >
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="用户单位">
+          <el-input v-model="editForm.company" >
           </el-input>
         </el-form-item>
       </el-form>
@@ -222,11 +231,22 @@
       //具体实现，请更新到数据库
       async onSubmit() {
         console.log(this.form);
+
+        if (this.userList.find(u => u.userId === this.form.userId) !== undefined) {
+          this.$message.error("用户ID重复")
+          return
+        }
+
         //this.userList.push(this.form)
 
-        await this.$http.post('a.general', {type: "edit_or_add_user", user: this.form});
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general', {type: "edit_or_add_user", user: this.form});
 
-        console.log("成功添加")
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功添加")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
 
         this.getUserList()
       },
@@ -248,9 +268,13 @@
 
       //监听修改对话框关闭事件，这里关闭后，提交，更新数据到数据库
       async editUpdate() {
-        await this.$http.post('a.general', {type: "edit_or_add_user", user: this.editForm});
+        const {data: {feedback:feedbackInfo}} = await this.$http.post('a.general', {type: "edit_or_add_user", user: this.editForm});
 
-        console.log("成功更新")
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功修改")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
 
         this.editDialogVisible = false // 关闭对话框
 
@@ -281,21 +305,8 @@
         //这里是直接操纵userList作为测试
         //let n
         console.log(id)
-        // for (n in this.userList) {
-        //   if (this.userList[n].userId === id) {
-        //     this.userList.splice(n,1)
-        //     console.log(this.userList[n])
-        //   }
-        // }
 
         await this.$http.post('a.general',{type:"delete_user",userId:id})
-
-        //发送网络请求，删除该条记录(参数为id，即userId），下面是伪代码
-        /*        if(failed){//失败
-          return this.$message.error('删除用户失败')
-        }
-        //成功
-        this.$message.success('删除用户成功')*/
 
         this.$message.success('删除用户成功')
 
@@ -313,7 +324,7 @@
 
         this.userList = respondInfo.userList;
 
-        console.log('成功' + this.userList.length);
+        console.log('获得用户信息' + this.userList.length);
       },
 
     }
