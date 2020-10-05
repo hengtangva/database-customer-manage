@@ -179,7 +179,7 @@
       editUpdate() {
         this.editDialogVisible = false // 关闭对话框
         //回复后，请发送网络请求更新到数据库
-        this.$http.get('url',data)
+        //this.$http.get('url',data)
       },
 
 

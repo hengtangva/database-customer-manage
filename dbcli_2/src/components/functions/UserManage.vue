@@ -176,7 +176,7 @@
             userId: '007',
             username: 'kobe',
             tel: '119',
-            company: 'facebook'.
+            company: 'facebook'
           },
           {
             userId: '009',
