@@ -99,8 +99,7 @@
 
       </el-form>
       <span slot = "footer" class = "dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addDialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
 
@@ -237,7 +236,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message('已取消')
         }
-        //这里是直接操纵userList作为测试
+        //这里是直接操纵trainList作为测试
         let n
         console.log(id)
         for (n in this.trainList) {

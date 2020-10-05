@@ -34,7 +34,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-upload" @click="login">登录</el-button>
-          <el-button type="primary" icon="el-icon-circle-plus-outline" @click="register">注册</el-button>
+          <el-button type="primary" icon="el-icon-circle-plus-outline" @click="register">投诉</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -67,7 +67,7 @@
               message: '欢迎你,' + this.user.name + '!',
               duration: 3000
             })
-            this.$router.replace('/main')//跳转到主界面
+            await this.$router.replace('/main')//跳转到主界面
           } else {
             return false
           }
