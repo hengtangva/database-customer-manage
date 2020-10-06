@@ -23,13 +23,13 @@
         <!--索引列-->
         <el-table-column  type="index"></el-table-column>
         <!--这里我就写两个作为样例了，具体展示多少信息，可以自己设置，或者再一起讨论-->
-        <el-table-column label = '用户编码' >
+        <el-table-column label = '培训对象编码' >
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.userId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label = '用户名称'>
+        <el-table-column label = '培训对象名称'>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.username }}</span>
           </template>
@@ -53,6 +53,10 @@
             <!--提醒-->
             <el-tooltip effect="dark" content="提醒用户" placement="top" :enterable="false">
               <el-button type="primary" icon="el-icon-bell" @click="remind(scope.row.userId)"></el-button><!--传入参数为用户id-->
+            </el-tooltip>
+
+            <el-tooltip effect="dark" content="删除" placement="top" :enterable="false" >
+              <el-button type="danger" icon="el-icon-delete" @click="removeTrain(scope.row.userId)"></el-button>
             </el-tooltip>
 
           </template>
@@ -79,11 +83,11 @@
             width = "30%">
       <el-form ref="form" :model="form" label-width="80px" >
 
-        <el-form-item label="用户编号">
+        <el-form-item label="培训对象编号">
           <el-input v-model="form.userId"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户名称">
+        <el-form-item label="培训对象名称">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
 
@@ -112,12 +116,12 @@
       <el-form :model = 'editForm'
                ref    = 'editFormRef'
                label-width = '70px'>
-        <el-form-item label="用户id">
+        <el-form-item label="培训对象编号">
           <el-input v-model="editForm.userId" disabled>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="用户名">
+        <el-form-item label="培训对象名称">
           <el-input v-model="editForm.username">
           </el-input>
         </el-form-item>
@@ -173,15 +177,27 @@
     },
     created() {//这里的vue实例创建，即进入UserManage时，就向服务器发送网络请求，获取用户列表
       //this.getUserList()//该方法见methods
+
+      this.getTrainList()
     },
     methods: {
-      remind(id){
+      async remind(id){
         let n;
         for (n in this.trainList) {
           if(this.trainList[n].userId == id){
             if(this.trainList[n].reminded == '未提醒'){
               this.trainList[n].reminded = '已提醒'
+            }else{
+              this.trainList[n].reminded = '未提醒'
             }
+
+            await this.$http.post(
+                'a.general', {type: "edit_train_info", info: this.trainList[n]}
+            );
+
+            this.getTrainList()
+
+            return
           }
         }
 
@@ -192,9 +208,20 @@
       //提交添加内容，
       // 这里我是直接把添加的用户信息直接append到userList中作为测试
       //具体实现，请更新到数据库
-      onSubmit() {
+      async onSubmit() {
         console.log(this.form);
-        this.trainList.push(this.form)
+        //this.trainList.push(this.form)
+
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general', {type: "add_train_info", info: this.form});
+
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功添加")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
+
+        this.getTrainList()
       },
 
       //展示用户编辑的对话框，来进行修改用户信息，这里请发送请求获取用户id
@@ -211,8 +238,20 @@
       },
 
       //监听修改对话框关闭事件，这里关闭后，提交，更新数据到数据库
-      editUpdate() {
+      async editUpdate() {
+        const {data: {feedback:feedbackInfo}} = await this.$http.post(
+            'a.general', {type: "edit_train_info", info: this.editForm}
+        );
+
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功修改")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
+
         this.editDialogVisible = false // 关闭对话框
+
+        this.getTrainList()
       },
 
       //监听添加用户对话框关闭事件
@@ -236,22 +275,11 @@
         if (confirmResult !== 'confirm') {
           return this.$message('已取消')
         }
-        //这里是直接操纵trainList作为测试
-        let n
-        console.log(id)
-        for (n in this.trainList) {
-          if (this.trainList[n].userId === id) {
-            this.trainList.splice(n,1)
-            console.log(this.trainList[n])
-          }
-        }
 
-        //发送网络请求，删除该条记录(参数为id，即userId），下面是伪代码
-        /*        if(failed){//失败
-          return this.$message.error('删除用户失败')
-        }
-        //成功
-        this.$message.success('删除用户成功')*/
+        await this.$http.post('a.general',{type:"delete_train_info",id:id})
+
+        this.$message.success('删除成功')
+
         this.getTrainList() //更新用户列表
       },
 
@@ -260,16 +288,13 @@
 
       //从数据库获取记录result，并更新到userList，返回来的result是一个对象数组
       async getTrainList() {
-        console.log('get')
-        /*  下面是我写的一些伪代码
-        result = get('url')
-        if(failed) {//请求失败，
-          return this.$message.error('获取用户列表失败')
-        }
-        //获取成功
-        this.userList = result
-      }
-    }*/
+        console.log('正在获取培训信息')
+
+        const {data: respondInfo} = await this.$http.post('a.general',{type:"get_train_infos"});
+
+        this.trainList = respondInfo.trainInfos;
+
+        console.log('获得培训信息' + this.trainList.length);
       },
 
     }
