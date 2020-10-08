@@ -1,15 +1,10 @@
 <template>
   <el-form ref="form" :model="Form" label-width="80px" class="bodyreg">
 
-      <el-form-item label="用户名">
-        <el-input v-model="Form.username ">
+      <el-form-item label="联系电话">
+        <el-input v-model="Form.telephone">
         </el-input>
       </el-form-item>
-
-    <el-form-item label="联系电话">
-      <el-input v-model="Form.telephone">
-      </el-input>
-    </el-form-item>
 
       <el-form-item label="投诉标题">
         <el-input v-model="Form.complainTitle">
@@ -32,8 +27,7 @@
     data() {
       return {
         Form: {
-          username: '',
-          telephone:'',
+          telephone: '',
           complainTitle:'',
           complain:''
         }
@@ -41,15 +35,19 @@
     },
     methods: {
      async onSubmit() {
-        await this.$http.post(
+       const {data: {feedback:feedbackInfo}} =await this.$http.post(
             'a.general',{type:"submit_complain",info:this.Form}
         );//发送请求，更新
 
-       this.$message({
-         type: 'success',
-         message: '提交成功',
-         showClose: true
-       })
+       if(feedbackInfo.len===0) {
+         this.$message({
+           type: 'success',
+           message: '提交成功',
+           showClose: true
+         })
+       }else{
+         this.$message.error(feedbackInfo)
+       }
       },
       reset(){
         this.$refs.form.resetFields();
