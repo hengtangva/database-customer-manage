@@ -108,7 +108,7 @@
         </el-form-item>
 
         <el-form-item label="处理投诉的回复">
-          <el-input v-model="editForm.answer" >
+          <el-input type="textarea" autosize v-model="editForm.answer" >
           </el-input>
         </el-form-item>
       </el-form>
@@ -188,7 +188,7 @@
       },
 
 
-      async replyComplain(id) {
+      async replyComplain() {
         const confirmResult = await this.$confirm('是否完成该条投诉的回复, ?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

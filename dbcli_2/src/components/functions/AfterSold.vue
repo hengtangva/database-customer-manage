@@ -86,7 +86,7 @@
             width = "30%">
       <el-form ref="form" :model="form" label-width="100px" >
 
-        <el-form-item label="用户编号">
+        <el-form-item label="客户编号">
           <el-input v-model="form.userId"></el-input>
         </el-form-item>
 
@@ -98,7 +98,7 @@
           <el-input v-model="form.goodsId"></el-input>
         </el-form-item>
 
-        <el-form-item label="交易数量">
+        <el-form-item label="购买数量">
           <el-input v-model="form.quantity"></el-input>
         </el-form-item>
 
@@ -115,8 +115,7 @@
 
       </el-form>
       <span slot = "footer" class = "dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addDialogVisible = false">关 闭</el-button>
       </span>
     </el-dialog>
 
