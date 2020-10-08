@@ -240,7 +240,7 @@
         //this.userList.push(this.form)
 
         const {data: {feedback:feedbackInfo}} =
-            await this.$http.post('a.general', {type: "edit_or_add_user", user: this.form});
+            await this.$http.post('a.general', {type: "add_user", user: this.form});
 
         if(feedbackInfo.length === 0) {
           this.$message.success("成功添加")
@@ -268,7 +268,8 @@
 
       //监听修改对话框关闭事件，这里关闭后，提交，更新数据到数据库
       async editUpdate() {
-        const {data: {feedback:feedbackInfo}} = await this.$http.post('a.general', {type: "edit_or_add_user", user: this.editForm});
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general', {type: "edit_user", user: this.editForm});
 
         if(feedbackInfo.length === 0) {
           this.$message.success("成功修改")
