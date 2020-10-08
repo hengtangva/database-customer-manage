@@ -30,6 +30,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column label = '投诉标题'>
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.complainTitle }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label = '投诉内容'>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.complain }}</span>
@@ -48,11 +54,11 @@
             <!--回复投诉-->
 
             <el-tooltip effect="dark" content="回复投诉" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" @click="showEdit(scope.row.userId)"></el-button><!--传入参数为用户id-->
+              <el-button type="primary" icon="el-icon-edit" @click="showReply(scope.row)"></el-button><!--传入参数为用户id-->
             </el-tooltip>
 
-            <el-tooltip effect="dark" content="完成处理" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-success" @click="removeUser(scope.row.userId)"></el-button><!--传入参数为用户id-->
+            <el-tooltip effect="dark" content="删除投诉" placement="top" :enterable="false">
+              <el-button type="primary" icon="el-icon-delete" @click="deleteComplain(scope.row)"></el-button><!--传入参数为用户id-->
             </el-tooltip>
 
           </template>
@@ -91,6 +97,11 @@
           </el-input>
         </el-form-item>
 
+        <el-form-item label="投诉标题">
+          <el-input v-model="editForm.complainTitle" disabled>
+          </el-input>
+        </el-form-item>
+
         <el-form-item label="投诉内容">
           <el-input v-model="editForm.complain" disabled>
           </el-input>
@@ -104,7 +115,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editUpdate">确 定</el-button>
+        <el-button type="primary" @click="replyComplain">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -129,12 +140,14 @@
           {
             userId: '001',
             username: 'th',
+            complainTitle:'title',
             complain: 'price too high',//这是用户投诉的内容
             answer:'',                 //这是处理投诉回复的内容
           },
           {
             userId: '007',
             username: 'kobe',
+            complainTitle: 't',
             complain: 'quality bad',
             answer:'',
           },
@@ -161,31 +174,21 @@
 
 
       //展示用户编辑的对话框，来进行修改用户信息，这里请发送请求获取用户id
-      showEdit(id) {
+      showReply(row) {
         //这里是我没直接用data里面的userList进行测试
-        let n;
-        console.log(id);
-        for (n in this.complainList) {
-          //如果点击edit按钮后，传入的id和complainList某一行相同，就将改条记录给editForm
-          if (this.userList[n].userId === id) {
-            this.editForm = this.complainList[n]
-            console.log(this.complainList[n])
-          }
-        }
+
+        console.log(row)
+
         this.editDialogVisible = true
       },
 
       //监听修改对话框关闭事件，这里关闭后，提交，更新数据到数据库
       editUpdate() {
         this.editDialogVisible = false // 关闭对话框
-        //回复后，请发送网络请求更新到数据库
-        //this.$http.get('url',data)
       },
 
 
-
-      //根据id删除用户
-      async removeUser(id) {
+      async replyComplain(id) {
         const confirmResult = await this.$confirm('是否完成该条投诉的回复, ?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -201,16 +204,32 @@
           return this.$message('已取消')
         }
 
-        //完成回复后，删除界面上的记录
-        let n
-        console.log(id)
-        for (n in this.complainList) {
-          if (this.complainList[n].userId === id) {
-            this.complainList.splice(n,1)
-            console.log(this.complainList[n])
-          }
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general',
+                {type: "reply_complain", userId:this.editForm.userId, reply:this.editForm.reply}
+            );
+
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功")
+        }else{
+          this.$message.error(feedbackInfo)
         }
 
+        this.editDialogVisible=false
+
+      },
+
+      async deleteComplain(row){
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general',
+                {type: "delete_complain", userId:row.userId}
+            );
+
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
       },
 
 
@@ -218,33 +237,30 @@
 
       //从数据库获取记录result，并更新到complainList，返回来的result是一个对象数组
       async getComplainList() {
-        console.log('get')
+
         //这里的complainlist最后接受的是未回复的 内容，就是answer为空的，
         //管理员回复完后，立即更新到数据库，
         // 管理员可以在界面上点击处理完成按钮，删除界面上处理完的记录就在界面上删除，但不影响数据库中的数据
-        /*
-        result = get('url')
-        if(failed) {//请求失败，
-          return this.$message.error('获取用户列表失败')
-        }
-        //获取成功
-        this.complainList = result
-      }
-    }*/
+
+        const {data: respondInfo} = await this.$http.post(
+            'a.general',{type:"get_complains", processed:false}
+        );
+
+        this.complainList = respondInfo.complainList;
+
+        console.log('got')
+
       },
       async getFinishList() {
-        console.log('get')
         //这里的complainlist最后接受的是已经回复的 内容，，
 
-        /*
-        result = get('url')
-        if(failed) {//请求失败，
-          return this.$message.error('获取用户列表失败')
-        }
-        //获取成功
-        this.complainList = result
-      }
-    }*/
+        const {data: respondInfo} = await this.$http.post(
+            'a.general',{type:"get_complains", processed:true}
+        );
+
+        this.complainList = respondInfo.complainList;
+
+        console.log('got')
       },
 
 

@@ -36,7 +36,7 @@
     methods: {
      async onSubmit() {
        const {data: {feedback:feedbackInfo}} =await this.$http.post(
-            'a.general',{type:"submit_complain",info:this.Form}
+            'a.general',{type:"submit_complain",complain:this.Form}
         );//发送请求，更新
 
        if(feedbackInfo.len===0) {

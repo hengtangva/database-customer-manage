@@ -232,10 +232,10 @@
       async onSubmit() {
         console.log(this.form);
 
-        if (this.userList.find(u => u.userId === this.form.userId) !== undefined) {
-          this.$message.error("用户ID重复")
-          return
-        }
+        // if (this.userList.find(u => u.userId === this.form.userId) !== undefined) {
+        //   this.$message.error("用户ID重复")
+        //   return
+        // }
 
         //this.userList.push(this.form)
 

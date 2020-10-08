@@ -41,6 +41,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column label = '交易数量'>
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.quantity }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label = '服务质量评分'>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.score }}</span>
@@ -92,6 +98,10 @@
           <el-input v-model="form.goodsId"></el-input>
         </el-form-item>
 
+        <el-form-item label="交易数量">
+          <el-input v-model="form.quantity"></el-input>
+        </el-form-item>
+
         <el-form-item label="服务质量评分">
           <el-input v-model="form.score"></el-input>
         </el-form-item>
@@ -133,19 +143,22 @@
             userId: '001',
             dealId: '122',
             score: 90,
-            goodsId: '001'
+            goodsId: '001',
+            quantity:3
           },
           {
             userId: '007',
             dealId: '332',
             score: 80,
-            goodsId: '002'
+            goodsId: '002',
+            quantity:7
           },
           {
             userId: '009',
             dealId: '002',
             score: 50,
-            goodsId: '003'
+            goodsId: '003',
+            quantity:10
           }
         ],
         total: 0,
@@ -180,9 +193,20 @@
       //提交添加内容，
       // 这里我是直接把添加的用户信息直接append到userList中作为测试
       //具体实现，请更新到数据库
-      onSubmit() {
-        console.log(this.form);
-        this.soldList.push(this.form)
+      async onSubmit() {
+        //console.log(this.form);
+        //this.soldList.push(this.form)
+
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general', {type: "add_sale_info", info: this.form});
+
+        if(feedbackInfo.length === 0) {
+          this.$message.success("成功添加")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
+
+        this.getsoldList()
       },
 
       //根据id删除用户
@@ -201,22 +225,9 @@
         if (confirmResult !== 'confirm') {
           return this.$message('已取消')
         }
-        //这里是直接操纵userList作为测试
-        let n
-        console.log(id)
-        for (n in this.soldList) {
-          if (this.soldList[n].dealId === id) {
-            this.soldList.splice(n,1)
-            console.log(this.soldList[n])
-          }
-        }
 
-        //发送网络请求，删除该条记录(参数为id，即userId），下面是伪代码
-        /*        if(failed){//失败
-          return this.$message.error('删除用户失败')
-        }
-        //成功
-        this.$message.success('删除用户成功')*/
+        await this.$http.post('a.general',{type:"delete_sale_info",id:id})
+
         this.getsoldList() //更新用户列表
       },
 
@@ -225,16 +236,13 @@
 
       //从数据库获取记录result，并更新到userList，返回来的result是一个对象数组
       async getsoldList() {
-        console.log('get')
-        /*  下面是我写的一些伪代码
-        result = get('url')
-        if(failed) {//请求失败，
-          return this.$message.error('获取用户列表失败')
-        }
-        //获取成功
-        this.soldList = result
-      }
-    }*/
+        console.log('正在获取销售信息')
+
+        const {data: respondInfo} = await this.$http.post('a.general',{type:"get_sale_infos"});
+
+        this.soldList = respondInfo.soldList;
+
+        console.log('获得销售信息' + this.soldList.length);
       },
 
     }
