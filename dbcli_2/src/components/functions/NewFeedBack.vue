@@ -72,7 +72,10 @@
           await this.$http.post('a.general',{type:"get_analyze_info"});
 
       this.optionline.series = evaluationList;
-      this.optionline.series = goodIdList;
+      this.optionline.xAxis.data = goodIdList;
+
+      this.optionbar.series = quantityList;
+      this.optionbar.xAxis.data = goodIdList;
 
     },
     methods: {

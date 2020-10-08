@@ -59,7 +59,7 @@
             <!--删除-->
 
             <el-tooltip effect="dark" content="删除考核单" placement="top" :enterable="false" >
-              <el-button type="danger" icon="el-icon-delete" @click="removeItem(scope.row.dealId)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" @click="removeItem(scope.row)"></el-button>
             </el-tooltip>
 
           </template>
@@ -174,8 +174,8 @@
 
       }
     },
-    created() {//这里的vue实例创建，即进入UserManage时，就向服务器发送网络请求，获取用户列表
-      this.getUserList()//该方法见methods
+    created() {
+      this.getsoldList()
     },
     methods: {
       handleSizeChange(newSize) {
@@ -210,7 +210,7 @@
       },
 
       //根据id删除用户
-      async removeItem(id) {
+      async removeItem(row) {
         const confirmResult = await this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -226,7 +226,7 @@
           return this.$message('已取消')
         }
 
-        await this.$http.post('a.general',{type:"delete_sale_info",id:id})
+        await this.$http.post('a.general',{type:"delete_sale_info",id:row.dealId})
 
         this.getsoldList() //更新用户列表
       },
