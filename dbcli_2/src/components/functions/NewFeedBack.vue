@@ -60,13 +60,19 @@
         }
       }
     },
-    mounted() {
+    async mounted() {
       this.drawLine()
       //请在这里发起网络请求，
       //所请求的数据是，1,统计出的每种商品销量，这个在ComplainManage中，的记录可以获得
       //2,每种商品的平均评分，同样也可以在ComplainManage中得到，并更新到一下数据
      // this.optionline.series[0].data = $http.get('url')
      // this.optionbar.series[0].data = $http.get('url')
+
+      const {goodIdList:goodIdList, quantityList:quantityList, evaluationList: evaluationList} =
+          await this.$http.post('a.general',{type:"get_analyze_info"});
+
+      this.optionline.series = evaluationList;
+      this.optionline.series = goodIdList;
 
     },
     methods: {
