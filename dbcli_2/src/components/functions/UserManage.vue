@@ -307,9 +307,14 @@
         //let n
         console.log(id)
 
-        await this.$http.post('a.general',{type:"delete_user",userId:id})
+        const {data: {feedback:feedbackInfo}} =
+            await this.$http.post('a.general',{type:"delete_user",userId:id})
 
-        this.$message.success('删除用户成功')
+        if(feedbackInfo.length === 0) {
+          this.$message.success("删除用户成功")
+        }else{
+          this.$message.error(feedbackInfo)
+        }
 
         this.getUserList() //更新用户列表
       },
