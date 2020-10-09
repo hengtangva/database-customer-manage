@@ -176,23 +176,23 @@
         //你那边更新数据库内容，然后动态把新的userList再发给我，以达到客户端这边的动态显示修改内容
         userList: [
           {
-            userId: '001',
-            username: 'th',
-            tel: '110',
-            company: 'microsoft',
-          },
-          {
-            userId: '007',
-            username: 'kobe',
-            tel: '119',
-            company: 'facebook'
-          },
-          {
-            userId: '009',
-            username: 'jordan',
-            tel: '3553',
-            company: 'ibm'
+            userId: '加载中',
+            username: '',
+            tel: '',
+            company: '',
           }
+          // {
+          //   userId: '007',
+          //   username: 'kobe',
+          //   tel: '119',
+          //   company: 'facebook'
+          // },
+          // {
+          //   userId: '009',
+          //   username: 'jordan',
+          //   tel: '3553',
+          //   company: 'ibm'
+          // }
         ],
         total: 0,
 

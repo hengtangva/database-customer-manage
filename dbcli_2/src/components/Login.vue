@@ -81,7 +81,7 @@
       return {
         user: {
           name: 'admin',
-          pass: '123'
+          pass: ''
         },
       }
     }

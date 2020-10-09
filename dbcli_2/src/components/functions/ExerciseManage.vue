@@ -152,15 +152,15 @@
         },
         trainList: [//发送网络请求时，请直接把所有的用户信息都返回给我
           {
-            userId: '001',
-            username: 'th',
-            reminded: '未提醒'
-          },
-          {
-            userId: '007',
-            username: 'kobe',
+            userId: '加载中',
+            username: '',
             reminded: '未提醒'
           }
+          // {
+          //   userId: '007',
+          //   username: 'kobe',
+          //   reminded: '未提醒'
+          // }
         ],
         addDialogVisible: false, //控制添加用户信息对话框的显示和隐藏
 

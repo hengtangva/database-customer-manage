@@ -41,7 +41,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label = '交易数量'>
+        <el-table-column label = '商品销量'>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.quantity }}</span>
           </template>
@@ -139,26 +139,26 @@
         //你那边更新数据库内容，然后动态把新的userList再发给我，以达到客户端这边的动态显示修改内容
         soldList: [
           {
-            userId: '001',
-            dealId: '122',
-            score: 90,
-            goodsId: '001',
-            quantity:3
-          },
-          {
-            userId: '007',
-            dealId: '332',
-            score: 80,
-            goodsId: '002',
-            quantity:7
-          },
-          {
-            userId: '009',
-            dealId: '002',
-            score: 50,
-            goodsId: '003',
-            quantity:10
+            userId: '加载中',
+            dealId: '',
+            score: 0,
+            goodsId: '',
+            quantity: 0
           }
+          // {
+          //   userId: '007',
+          //   dealId: '332',
+          //   score: 80,
+          //   goodsId: '002',
+          //   quantity:7
+          // },
+          // {
+          //   userId: '009',
+          //   dealId: '002',
+          //   score: 50,
+          //   goodsId: '003',
+          //   quantity:10
+          // }
         ],
         total: 0,
 
