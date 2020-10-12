@@ -39,7 +39,7 @@
             'a.general',{type:"submit_complain",complain:this.Form}
         );//发送请求，更新
 
-       if(feedbackInfo.len===0) {
+       if(feedbackInfo.length===0) {
          this.$message({
            type: 'success',
            message: '提交成功',

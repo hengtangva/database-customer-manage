@@ -93,7 +93,7 @@
         </el-form-item>
 
         <el-form-item label="用户名">
-          <el-input v-model="editForm.username " disabled>
+          <el-input v-model="editForm.username" disabled>
           </el-input>
         </el-form-item>
 
@@ -179,6 +179,8 @@
 
         console.log(row)
 
+        this.editForm = row
+
         this.editDialogVisible = true
       },
 
@@ -206,7 +208,7 @@
 
         const {data: {feedback:feedbackInfo}} =
             await this.$http.post('a.general',
-                {type: "reply_complain", userId:this.editForm.userId, reply:this.editForm.reply}
+                {type: "reply_complain", userId:this.editForm.userId, reply:this.editForm.answer}
             );
 
         if(feedbackInfo.length === 0) {
@@ -216,6 +218,8 @@
         }
 
         this.editDialogVisible=false
+
+        this.getComplainList()
 
       },
 
