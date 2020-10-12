@@ -15,6 +15,18 @@
       <!--这里时显示用户信息的部分-->
       <el-table :data = 'complainList' stripe> <!--绑定数据为，complainList-->
 
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <el-form label-position="left" inline class="demo-table-expand">
+
+              <el-form-item label="回复内容">
+                <span>{{ scope.row.answer }}</span>
+              </el-form-item>
+
+            </el-form>
+          </template>
+        </el-table-column>
+
         <!--索引列-->
         <el-table-column  type="index"></el-table-column>
 
@@ -42,11 +54,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column label = '投诉回复'>
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.answer }}</span>
-          </template>
-        </el-table-column>
+<!--        <el-table-column label = '投诉回复'>-->
+<!--          <template slot-scope="scope">-->
+<!--            <span style="margin-left: 10px">{{ scope.row.answer }}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <!--这里是对用户信息的修改删除-->
         <el-table-column label = '操作'>

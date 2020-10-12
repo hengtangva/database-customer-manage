@@ -9,7 +9,7 @@
     <el-card>
       <el-row :gutter = '20'>
         <el-col :span = '7'>
-          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @click="getUserList">
+          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @change="getUserList">
             <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
           </el-input>
         </el-col>
@@ -326,7 +326,9 @@
       async getUserList() {
         console.log('正在获取用户信息')
 
-        const {data: respondInfo} = await this.$http.post('a.general',{type:"get_users"});
+        const {data: respondInfo} = await this.$http.post('a.general',{
+          type:"get_users", queryInfo:this.queryInfo
+        });
 
         this.userList = respondInfo.userList;
 

@@ -8,11 +8,11 @@
 
     <el-card>
       <el-row :gutter = '20'>
-        <el-col :span = '7'>
-          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @click="getsoldList">
-            <el-button slot="append" icon="el-icon-search" @click="getsoldList"></el-button>
-          </el-input>
-        </el-col>
+<!--        <el-col :span = '7'>-->
+<!--          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @click="getsoldList">-->
+<!--            <el-button slot="append" icon="el-icon-search" @click="getsoldList"></el-button>-->
+<!--          </el-input>-->
+<!--        </el-col>-->
         <el-col :span = '4'>
           <el-button type = "primary" @click = "addDialogVisible = true">添加考核单</el-button>
         </el-col>
