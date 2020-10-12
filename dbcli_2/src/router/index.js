@@ -20,38 +20,62 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta:{
+      title:'数据库课程设计'
+    }
   },
   {
     path: '/main',
     name: 'Main',
     component: Main,
     redirect: '/main/welcome',
+    meta:{
+      title:'数据库课程设计'
+    },
     children: [
         {
           path: '/main/welcome',
-          component: Welcome
+          component: Welcome,
+          meta:{
+            title:'数据库课程设计'
+          },
         },
       {
         path: '/main/user',
         name: 'user',
-        component: UserManage
+        component: UserManage,
+        meta:{
+          title:'数据库课程设计'
+        },
       },
       {
         path: '/main/exercise',
-        component: ExerciseManage
+        component: ExerciseManage,
+        meta:{
+          title:'数据库课程设计'
+        },
       },
       {
         path: '/main/sold',
-        component: AfterSold
+        component: AfterSold,
+        meta:{
+          title:'数据库课程设计'
+        },
       },
       {
         path: '/main/complain',
         component: ComplainManage,
+        meta:{
+          title:'数据库课程设计'
+        },
       },
       {
         path: '/main/feedback',
-        component: NewFeedBack
+        component: NewFeedBack,
+        meta:{
+          title:'数据库课程设计'
+        },
       }
     ]
   },
@@ -59,7 +83,10 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: Register,
+      meta:{
+          title:'数据库课程设计'
+      },
   }
 ]
 
@@ -67,6 +94,14 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+    /* 路由发生变化修改页面title */
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    next()
 })
 
 //挂载路由导航守卫
