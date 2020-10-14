@@ -246,6 +246,12 @@
         }else{
           this.$message.error(feedbackInfo)
         }
+
+        if(row.answer == null){
+          this.getComplainList()
+        }else{
+          this.getFinishList()
+        }
       },
 
 
